@@ -21,11 +21,20 @@ class JavaProject(val rootDirectoryPath: String) : Project {
 
     override fun modules(): List<Module> {
         val javaFiles = File("").listFiles(FilenameFilter { dir, name -> name.endsWith(".java") })
-        val moduleToJavaFile = ArrayListValuedHashMap<String, File>()
+        val moduleNameToJavaFile = ArrayListValuedHashMap<String, File>()
         for (javaFile in javaFiles) {
-            moduleToJavaFile.put(NameOfModule(javaFile.absolutePath).name(), javaFile)
+            moduleNameToJavaFile.put(NameOfModule(javaFile.absolutePath).name(), javaFile)
         }
-        return listOf()
+        val modules = mutableListOf<Module>()
+        moduleNameToJavaFile.keys().forEach { moduleName ->
+            val filesForModule = moduleNameToJavaFile[moduleName];
+            modules.add(JavaModule(moduleName, filesForModule.map { f -> JavaClass(f.name, f) }))
+        }
+        return modules
+    }
+
+    private fun toClass(filesForModule: List<File>): List<Class> {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
