@@ -1,6 +1,7 @@
 package ru.atc.jdmeter.domain
 
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap
+import org.apache.commons.io.FileUtils
 import ru.atc.jdmeter.domain.Module
 import ru.atc.jdmeter.domain.ProjectStatistic
 import java.io.File
@@ -15,27 +16,32 @@ public interface Project {
 }
 
 class JavaProject(val rootDirectoryPath: String) : Project {
+    private var modules: List<Module> = listOf();
+
     override fun statistic(): ProjectStatistic {
-        throw UnsupportedOperationException("not implemented")
+        if (modules.size == 0) {
+            modules()
+        }
+        return ProjectStatistic()
     }
 
     override fun modules(): List<Module> {
-        val javaFiles = File("").listFiles(FilenameFilter { dir, name -> name.endsWith(".java") })
+        val javaFiles = FileUtils.listFiles(File(rootDirectoryPath), arrayOf("java"), true)
+        val filteredJavaFile = javaFiles.filter { f -> filesIgnoreTestAndGenerated(f) }
         val moduleNameToJavaFile = ArrayListValuedHashMap<String, File>()
-        for (javaFile in javaFiles) {
+        for (javaFile in filteredJavaFile) {
             moduleNameToJavaFile.put(NameOfModule(javaFile.absolutePath).name(), javaFile)
         }
         val modules = mutableListOf<Module>()
         moduleNameToJavaFile.keys().forEach { moduleName ->
             val filesForModule = moduleNameToJavaFile[moduleName];
-            modules.add(JavaModule(moduleName, filesForModule.map { f -> JavaClass(f.name, f) }))
+            modules.add(JavaModule(moduleName, filesForModule.map { f -> JavaClass(f.name, f.readLines()) }))
         }
+        this.modules = modules;
         return modules
     }
 
-    private fun toClass(filesForModule: List<File>): List<Class> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    private fun filesIgnoreTestAndGenerated(f: File) = !f.absolutePath.contains("target") && !f.absolutePath.contains("test") && !f.absolutePath.contains("generated")
 
 
 }

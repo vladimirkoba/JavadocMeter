@@ -11,7 +11,7 @@ interface Class {
     fun statistic(): ClassStatistic
 }
 
-class JavaClass(val name: String, val file: File) : Class {
+class JavaClass(val name: String, val linesOfCide: List<String>) : Class {
     override fun name(): String {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -19,5 +19,10 @@ class JavaClass(val name: String, val file: File) : Class {
     override fun statistic(): ClassStatistic {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    override fun toString(): String {
+        return "JavaClass(name='$name'"
+    }
+
 
 }

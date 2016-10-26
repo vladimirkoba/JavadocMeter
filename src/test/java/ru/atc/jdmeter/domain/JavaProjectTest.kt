@@ -6,10 +6,11 @@ import org.junit.Test
 /**
  * Created by vkoba on 26.10.2016.
  */
-class JavaProjectTest{
+class JavaProjectTest {
 
     @Test
-    fun modulesFromProjectStructure(){
-
+    fun modulesFromProjectStructure() {
+        val modules = JavaProject("""C:\Projects\billing-system""").modules()
+        println(modules)
     }
 }

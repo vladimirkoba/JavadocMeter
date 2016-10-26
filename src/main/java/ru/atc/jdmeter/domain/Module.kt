@@ -19,4 +19,9 @@ class JavaModule(val name: String, val classes: List<Class>) : Module {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
+    override fun toString(): String {
+        return "JavaModule(name='$name', classes=$classes)"
+    }
+
+
 }
