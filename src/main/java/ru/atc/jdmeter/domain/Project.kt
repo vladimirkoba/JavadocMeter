@@ -10,7 +10,7 @@ import java.io.FilenameFilter
 /**
  * Created by vkoba on 26.10.2016.
  */
-public interface Project {
+ interface Project {
     fun modules(): List<Module>
     fun statistic(modules: List<ModuleStatistic>): ProjectStatistic
 }
@@ -38,7 +38,7 @@ class JavaProject(val rootDirectoryPath: String) : Project {
         val modules = mutableListOf<Module>()
         moduleNameToJavaFile.keys().forEach { moduleName ->
             val filesForModule = moduleNameToJavaFile[moduleName];
-            modules.add(JavaModule(moduleName, filesForModule.map { f -> JavaClass(f.name, f.readLines()) }))
+            modules.add(JavaModule(moduleName, filesForModule.map { f -> JavaClass(f.nameWithoutExtension, f.readLines()) }))
         }
         return modules
     }
