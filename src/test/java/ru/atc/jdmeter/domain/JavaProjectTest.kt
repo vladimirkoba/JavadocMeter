@@ -11,6 +11,6 @@ class JavaProjectTest {
     @Test
     fun modulesFromProjectStructure() {
         val modules = JavaProject("""C:\Projects\billing-system""").modules()
-        println(modules)
+        print(modules.lastIndex)
     }
 }

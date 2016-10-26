@@ -12,17 +12,20 @@ import java.io.FilenameFilter
  */
 public interface Project {
     fun modules(): List<Module>
-    fun statistic(): ProjectStatistic
+    fun statistic(modules: List<ModuleStatistic>): ProjectStatistic
 }
 
 class JavaProject(val rootDirectoryPath: String) : Project {
-    private var modules: List<Module> = listOf();
 
-    override fun statistic(): ProjectStatistic {
-        if (modules.size == 0) {
-            modules()
+
+    override fun statistic(modulesStatistic: List<ModuleStatistic>): ProjectStatistic {
+        var projectCountOfClasses = 0;
+        var projectCoveragePercentage = 0.0;
+        for (ms in modulesStatistic) {
+            projectCountOfClasses += ms.countOfClasses
+            projectCoveragePercentage += ms.coveragePercent
         }
-        return ProjectStatistic()
+        return ProjectStatistic(projectCountOfClasses, projectCoveragePercentage / projectCountOfClasses)
     }
 
     override fun modules(): List<Module> {
@@ -37,7 +40,6 @@ class JavaProject(val rootDirectoryPath: String) : Project {
             val filesForModule = moduleNameToJavaFile[moduleName];
             modules.add(JavaModule(moduleName, filesForModule.map { f -> JavaClass(f.name, f.readLines()) }))
         }
-        this.modules = modules;
         return modules
     }
 
