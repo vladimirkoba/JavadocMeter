@@ -12,7 +12,7 @@ import org.junit.Assert.*
 class MethodNameTest {
     @Test
     fun extractNameFromLineOfCode() {
-        assertEquals("getName",MethodName("public static void getName(String u){").name())
+        assertEquals("getName", Method("public static void getName(String u){").name())
     }
 
 }
