@@ -2,7 +2,6 @@ package ru.atc.jdmeter.domain
 
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap
 import org.apache.commons.io.FileUtils
-import ru.atc.jdmeter.domain.Module
 import ru.atc.jdmeter.domain.ProjectStatistic
 import java.io.File
 import java.io.FilenameFilter
@@ -10,8 +9,8 @@ import java.io.FilenameFilter
 /**
  * Created by vkoba on 26.10.2016.
  */
- interface Project {
-    fun modules(): List<Module>
+interface Project {
+    fun modules(): List<JavaModule>
     fun statistic(modules: List<ModuleStatistic>): ProjectStatistic
 }
 
@@ -28,16 +27,16 @@ class JavaProject(val rootDirectoryPath: String) : Project {
         return ProjectStatistic(projectCountOfClasses, projectCoveragePercentage / projectCountOfClasses)
     }
 
-    override fun modules(): List<Module> {
+    override fun modules(): List<JavaModule> {
         val javaFiles = FileUtils.listFiles(File(rootDirectoryPath), arrayOf("java"), true)
         val filteredJavaFile = javaFiles.filter { f -> filesIgnoreTestAndGenerated(f) }
         val moduleNameToJavaFile = ArrayListValuedHashMap<String, File>()
         for (javaFile in filteredJavaFile) {
             moduleNameToJavaFile.put(NameOfModule(javaFile.absolutePath).name(), javaFile)
         }
-        val modules = mutableListOf<Module>()
-        moduleNameToJavaFile.keys().forEach { moduleName ->
-            val filesForModule = moduleNameToJavaFile[moduleName];
+        val modules = mutableListOf<JavaModule>()
+        for (moduleName in moduleNameToJavaFile.keys().uniqueSet()) {
+            val filesForModule = moduleNameToJavaFile[moduleName]
             modules.add(JavaModule(moduleName, filesForModule.map { f -> JavaClass(f.nameWithoutExtension, f.readLines()) }))
         }
         return modules

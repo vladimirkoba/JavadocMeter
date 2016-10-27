@@ -15,7 +15,7 @@ class JavaClass(val name: String, val linesOfCode: List<String>) : Class {
     override fun hasCommentAboveClass(): Boolean {
         return linesOfCode.subList(0, linesOfCode.indexOfFirst { s -> s.contains("class $name") })
                 .reduceRight { s1, s2 -> s1 + s2 }
-                .contains("/**");
+                .contains("/**")
     }
 
     override fun countOfPublicMethod(): Int {
