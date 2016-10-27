@@ -61,22 +61,22 @@ public class CamelConfig {
 
     @Test
     fun hasCommentAboveClass_hasComment() {
-        assertTrue(JavaClass("A", classWithComment()).hasCommentAboveClass())
+        assertTrue(Class("A", classWithComment()).hasCommentAboveClass())
     }
 
     @Test
     fun hasCommentAboveClass_noComment() {
-        assertFalse(JavaClass("A", classNoComment()).hasCommentAboveClass())
+        assertFalse(Class("A", classNoComment()).hasCommentAboveClass())
     }
 
     @Test
     fun countOfPublicMethod_threePublicMethod_return3() {
-        assertEquals(3, JavaClass("CamelConfig", testClassText.lines()).countOfPublicMethod())
+        assertEquals(3, Class("CamelConfig", testClassText.lines()).countOfPublicMethod())
     }
 
     @Test
     fun countOfPublicCommentedMethod_oneCommenedMethod_return1() {
-        assertEquals(1, JavaClass("CamelConfig", testClassText.lines()).countOfCommentedPublicMethod())
+        assertEquals(1, Class("CamelConfig", testClassText.lines()).countOfCommentedPublicMethod())
     }
 
     private fun classWithComment() = listOf("/**", "*", "*comment", "*/", "public class A{", "}")
