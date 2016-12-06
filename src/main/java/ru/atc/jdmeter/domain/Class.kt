@@ -56,14 +56,14 @@ class Class(val name: String, val linesOfCode: List<String>) {
     }
 
     private fun findPotencialCommentArea(publicMethodLineNumber: Int, publicMethodLines: List<String>): List<String> {
-        return linesOfCode.subList(getPreviousMethodEndNumber(publicMethodLineNumber), publicMethodLineNumber);
+        return linesOfCode.subList(getPreviousMethodEndNumber(publicMethodLines, publicMethodLineNumber), publicMethodLineNumber);
 
     }
 
-    private fun getPreviousMethodEndNumber(publicMethodLineNumber: Int): Int {
-        for (i in publicMethodLineNumber downTo 1) {
+    private fun getPreviousMethodEndNumber(publicMethodLines: List<String>, publicMethodLineNumber: Int): Int {
+        for (i in (publicMethodLineNumber - 1) downTo 1) {
             val currentLine = linesOfCode[i];
-            if (currentLine.trim() == "}" || currentLine.contains(" class ") || currentLine.contains(" interface ") || currentLine.contains(" enum ")) {
+            if (publicMethodLines.contains(currentLine) || currentLine.trim() == "}" || currentLine.contains(" class ") || currentLine.contains(" interface ") || currentLine.contains(" enum ")) {
                 return i;
             }
         }
