@@ -55,22 +55,19 @@ class Class(val name: String, val linesOfCode: List<String>) {
         return commentedPublicMethods
     }
 
-    fun findPotencialCommentArea(publicMethodLineNumber: Int, publicMethodLines: List<String>): List<String> {
-        var prevPublicMethod = -1;
+    private fun findPotencialCommentArea(publicMethodLineNumber: Int, publicMethodLines: List<String>): List<String> {
+        return linesOfCode.subList(getPreviousMethodEndNumber(publicMethodLineNumber), publicMethodLineNumber);
 
+    }
+
+    private fun getPreviousMethodEndNumber(publicMethodLineNumber: Int): Int {
         for (i in publicMethodLineNumber downTo 1) {
-            var currectLine = linesOfCode[i];
-            if (currectLine.trim().equals("}") || currectLine.contains(" class ") || currectLine.contains(" interface ") || currectLine.contains(" enum ")) {
-                prevPublicMethod = i;
-                break;
+            val currentLine = linesOfCode[i];
+            if (currentLine.trim() == "}" || currentLine.contains(" class ") || currentLine.contains(" interface ") || currentLine.contains(" enum ")) {
+                return i;
             }
         }
-
-        if (prevPublicMethod == -1) {
-            return linesOfCode.subList(1, publicMethodLineNumber);
-        } else {
-            return linesOfCode.subList(prevPublicMethod, publicMethodLineNumber);
-        }
+        return 0;
     }
 
     fun countOfWtf(): Int {
