@@ -34,11 +34,12 @@ class Method(val lineOfCode: String) {
         return lineOfCode.substring(spaceBeforeMethodNameIndex, lineOfCode.indexOf("(")).trim()
     }
 
-    fun isPublicMethod(constructoName: String): Boolean {
+    fun isPublicMethod(constructorName: String): Boolean {
         return lineOfCode.contains("public ") &&
                 lineOfCode.contains("(") &&
                 !lineOfCode.contains("class ") &&
-                !name().contains(constructoName)
+                !lineOfCode.contains(" = ") &&
+                !name().contains(constructorName)
     }
 
     fun methodIsNotSetter() = !Method(lineOfCode).name().startsWith("set")
