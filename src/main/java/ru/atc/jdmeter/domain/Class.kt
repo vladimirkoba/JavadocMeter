@@ -36,6 +36,9 @@ class Class(val name: String, val linesOfCode: List<String>) {
         return commentedPublicMethods
     }
 
+    fun countOfWtf(): Int {
+        return linesOfCode.filter { line -> line.toUpperCase().contains("WTF") }.count()
+    }
 
 
 }

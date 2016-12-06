@@ -12,7 +12,7 @@ class Percentage(val num: Double) {
     fun value(): Double {
         return BigDecimal(num)
                 .multiply(BigDecimal(100))
-                .setScale(0, RoundingMode.CEILING)
+                .setScale(2, RoundingMode.CEILING)
                 .toDouble()
     }
 }
