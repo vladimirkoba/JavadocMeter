@@ -9,7 +9,7 @@ import java.math.RoundingMode
 
 
 fun main(args: Array<String>) {
-    val modules = ModuleFactory("""C:\Projects\billing-system""").createModules()
+    val modules = ModuleFactory("""C:\Users\akhovanskii\nspk\billing-system""").createModules()
     for (module in modules) {
         println("${module.name}\t ${ModuleStatistic(module).coveragePercent()}")
     }
