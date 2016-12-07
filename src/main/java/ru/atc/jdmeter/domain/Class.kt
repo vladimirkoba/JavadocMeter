@@ -13,37 +13,34 @@ class Class(val name: String, val linesOfCode: List<String>) {
     }
 
     fun isInterface(): Boolean {
-        return !linesOfCode.find { s -> s.contains(" interface ") }.isNullOrEmpty()
+        return linesOfCode.find { s -> s.contains(" interface ") } != null;
+    }
+
+    fun isMybatisInterface(): Boolean {
+        return linesOfCode.find { s -> s.contains("import org.apache.ibatis") } != null
     }
 
     fun countOfPublicMethod(): Int {
-        return linesOfCode
-                .filter { line -> Method(line).isPublicMethod(name) && Method(line).methodIsNotSetter() }
-                .count()
+        return publicMethodLines().count()
     }
 
-    fun notCommentedClasses(): List<String> {
-        val publicMethodLines = linesOfCode
-                .filter { line -> Method(line).isPublicMethod(name) && Method(line).methodIsNotSetter() }
-        var notCommentedClasses = mutableListOf<String>();
+    fun notCommentedClass(): String? {
+        val publicMethodLines = publicMethodLines();
         for (i in linesOfCode.indices) {
             if (publicMethodLines.contains(linesOfCode[i])) {
                 val potentialCommentArea = findPotencialCommentArea(i, publicMethodLines)
                 if (potentialCommentArea
                         .filter { line -> LineOfCode(line).hasCommentSymbols() || LineOfCode(line).hasOverrideAnnotation() }
                         .count() == 0) {
-                    if (!notCommentedClasses.contains(this.name)) {
-                        notCommentedClasses.add(this.name);
-                    }
+                    return this.name;
                 }
             }
         }
-        return notCommentedClasses;
+        return null;
     }
 
     fun countOfCommentedPublicMethod(): Int {
-        val publicMethodLines = linesOfCode
-                .filter { line -> Method(line).isPublicMethod(name) && Method(line).methodIsNotSetter() }
+        val publicMethodLines = publicMethodLines();
 
         var commentedPublicMethods = 0
         for (i in linesOfCode.indices) {
@@ -61,7 +58,6 @@ class Class(val name: String, val linesOfCode: List<String>) {
 
     private fun findPotencialCommentArea(publicMethodLineNumber: Int, publicMethodLines: List<String>): List<String> {
         return linesOfCode.subList(getPreviousMethodEndNumber(publicMethodLines, publicMethodLineNumber), publicMethodLineNumber);
-
     }
 
     private fun getPreviousMethodEndNumber(publicMethodLines: List<String>, publicMethodLineNumber: Int): Int {
@@ -78,6 +74,9 @@ class Class(val name: String, val linesOfCode: List<String>) {
         return linesOfCode.filter { line -> line.toUpperCase().contains("WTF") }.count()
     }
 
-
+    private fun publicMethodLines(): List<String> {
+        return linesOfCode
+                .filter { line -> (Method(line).isPublicMethod(name) && Method(line).methodIsNotSetter()) || (isInterface() && !isMybatisInterface() && Method(line).isInterfaceMethod()) };
+    }
 }
 

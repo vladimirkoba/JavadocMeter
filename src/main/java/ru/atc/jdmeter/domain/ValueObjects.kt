@@ -43,4 +43,8 @@ class Method(val lineOfCode: String) {
     }
 
     fun methodIsNotSetter() = !Method(lineOfCode).name().startsWith("set")
+
+    fun isInterfaceMethod(): Boolean {
+        return lineOfCode.contains("(") && lineOfCode.contains(");")
+    }
 }

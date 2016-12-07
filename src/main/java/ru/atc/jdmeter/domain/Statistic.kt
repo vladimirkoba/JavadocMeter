@@ -19,7 +19,7 @@ class ModuleStatistic(val module: Module) {
 
     fun commentedPublicMethods(): Int = module.classes.map(Class::countOfCommentedPublicMethod).sum()
 
-    fun notCommentedClasses() = module.classes.map(Class::notCommentedClasses);
+    fun notCommentedClasses() = module.classes.map(Class::notCommentedClass);
 }
 
 class ProjectStatistic(val modules: List<Module>) {
