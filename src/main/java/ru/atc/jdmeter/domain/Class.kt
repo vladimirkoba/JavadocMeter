@@ -12,6 +12,10 @@ class Class(val name: String, val linesOfCode: List<String>) {
                 .contains("/**")
     }
 
+    fun isInterface(): Boolean {
+        return !linesOfCode.find { s -> s.contains(" interface ") }.isNullOrEmpty()
+    }
+
     fun countOfPublicMethod(): Int {
         return linesOfCode
                 .filter { line -> Method(line).isPublicMethod(name) && Method(line).methodIsNotSetter() }
