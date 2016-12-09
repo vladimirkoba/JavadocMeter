@@ -76,7 +76,10 @@ class Class(val name: String, val linesOfCode: List<String>) {
 
     private fun publicMethodLines(): List<String> {
         return linesOfCode
-                .filter { line -> (Method(line).isPublicMethod(name) && Method(line).methodIsNotSetter()) || (isInterface() && !isMybatisInterface() && Method(line).isInterfaceMethod()) };
+                .filter { line ->
+                    (Method(line).isPublicMethod(name) && Method(line).methodIsNotSetter())
+                            || (isInterface() && !isMybatisInterface() && Method(line).isInterfaceMethod() && Method(line).methodIsNotSetter())
+                };
     }
 }
 
